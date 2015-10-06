@@ -987,6 +987,7 @@ $input-error-height: 24px !default;
     opacity: 0;
   }
 }
+
 @keyframes md-autocomplete-list-in {
   0% {
     opacity: 0;
@@ -1002,6 +1003,7 @@ $input-error-height: 24px !default;
     height: 40px;
   }
 }
+
 md-autocomplete {
   border-radius: 2px;
   display: block;
@@ -1049,26 +1051,34 @@ md-autocomplete {
     &.md-menu-showing {
       z-index: $z-index-backdrop + 1;
     }
-    md-progress-linear .md-mode-indeterminate {
+    md-progress-linear {
       position: absolute;
-      top: 20px; left: 0; width: 100%;
-      height: 3px;
-      transition: none;
+      bottom: -2px;
+      left: 0;
 
-      .md-container {
-        transition: none;
+      .md-mode-indeterminate {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
         height: 3px;
-      }
-      &.ng-enter {
-        transition: opacity 0.15s linear;
-        &.ng-enter-active {
-          opacity: 1;
+        transition: none;
+
+        .md-container {
+          transition: none;
+          height: 3px;
         }
-      }
-      &.ng-leave {
-        transition: opacity 0.15s linear;
-        &.ng-leave-active {
-          opacity: 0;
+        &.ng-enter {
+          transition: opacity 0.15s linear;
+          &.ng-enter-active {
+            opacity: 1;
+          }
+        }
+        &.ng-leave {
+          transition: opacity 0.15s linear;
+          &.ng-leave-active {
+            opacity: 0;
+          }
         }
       }
     }
@@ -1155,12 +1165,12 @@ md-autocomplete {
   max-height: 41px * 5.5;
   z-index: $z-index-tooltip;
 }
+
 .md-autocomplete-suggestions {
   margin: 0;
   list-style: none;
   padding: 0;
   li {
-    cursor: pointer;
     font-size: 14px;
     overflow: hidden;
     padding: 0 15px;
@@ -1173,6 +1183,10 @@ md-autocomplete {
 
     &:focus {
       outline: none;
+    }
+
+    &:not(.md-not-found-wrapper) {
+      cursor: pointer;
     }
   }
 }
@@ -1658,6 +1672,48 @@ button.md-button::-moz-focus-inner {
   }
 }
 
+$card-padding: 16px !default;
+$card-box-shadow: $whiteframe-shadow-1dp !default;
+
+md-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  margin: $baseline-grid;
+
+  box-shadow: $card-box-shadow;
+
+  > img,
+  > :not(md-card-content) img {
+    width: 100%;
+  }
+
+  md-card-content {
+    padding: $card-padding;
+  }
+  .md-actions {
+    margin: 0;
+
+    .md-button {
+      margin-bottom: $baseline-grid;
+      margin-top: $baseline-grid;
+      margin-right: $baseline-grid * .5;
+      margin-left: $baseline-grid * .5;
+    }
+  }
+  md-card-footer {
+    margin-top: auto;
+    padding: $card-padding;
+  }
+}
+
+@media screen and (-ms-high-contrast: active) {
+  md-card {
+    border: 1px solid #fff;
+  }
+}
+
+
 $checkbox-width: 18px !default;
 $checkbox-height: $checkbox-width !default;
 $checkbox-margin: 8px !default;
@@ -1804,48 +1860,6 @@ md-checkbox {
 
   }
 }
-
-$card-padding: 16px !default;
-$card-box-shadow: $whiteframe-shadow-1dp !default;
-
-md-card {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  margin: $baseline-grid;
-
-  box-shadow: $card-box-shadow;
-
-  > img,
-  > :not(md-card-content) img {
-    width: 100%;
-  }
-
-  md-card-content {
-    padding: $card-padding;
-  }
-  .md-actions {
-    margin: 0;
-
-    .md-button {
-      margin-bottom: $baseline-grid;
-      margin-top: $baseline-grid;
-      margin-right: $baseline-grid * .5;
-      margin-left: $baseline-grid * .5;
-    }
-  }
-  md-card-footer {
-    margin-top: auto;
-    padding: $card-padding;
-  }
-}
-
-@media screen and (-ms-high-contrast: active) {
-  md-card {
-    border: 1px solid #fff;
-  }
-}
-
 
 $chip-font-size: rem(1.6) !default;
 $chip-height: rem(3.2) !default;
@@ -5045,15 +5059,9 @@ $tabs-tab-width: $baseline-grid * 12 !default;
 $tabs-header-height: 48px !default;
 
 @keyframes md-tab-content-hide {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+  0% { opacity: 1; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 md-tab-data {
@@ -5077,12 +5085,14 @@ md-tabs {
     min-height: 200 + $tabs-header-height;
   }
   &[md-align-tabs="bottom"] {
+    padding-bottom: $tabs-header-height;
     md-tabs-wrapper {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
       height: $tabs-header-height;
+      z-index: 2;
     }
     md-tabs-content-wrapper {
       top: 0;
@@ -5210,7 +5220,6 @@ md-pagination-wrapper {
   &.md-center-tabs {
     position: relative;
     width: initial;
-    flex: 1;
     margin: 0 auto;
   }
 }
@@ -5758,7 +5767,7 @@ $virtual-repeat-scrollbar-width: 16px;
   .md-virtual-repeat-sizer {
     box-sizing: border-box;
     height: 1px;
-    display: inline-block;
+    display: block;
     margin: 0;
     padding: 0;
     width: 1px;
@@ -5770,9 +5779,7 @@ $virtual-repeat-scrollbar-width: 16px;
     margin: 0;
     padding: 0;
     position: absolute;
-    // Leave room for the scroll bar.
-    // TODO: Will probably need to perform measurements at runtime.
-    right: $virtual-repeat-scrollbar-width;
+    right: 0;
     top: 0;
   }
 }
